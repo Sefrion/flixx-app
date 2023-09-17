@@ -251,6 +251,33 @@ async function displaySlider() {
 	initSwiper();
 }
 
+// Display slides of top rated shows
+async function displayShowsSlider() {
+	const { results } = await fetchAPIData('tv/top_rated');
+
+	results.forEach((show) => {
+		const div = document.createElement('div');
+		div.classList.add('swiper-slide');
+
+		div.innerHTML = `
+         <a href="tv-details.html?id=${show.id}">
+            <img 
+            src="https://image.tmdb.org/t/p/w500${show.poster_path}" 
+            alt="${show.name}" 
+            />
+         </a>
+         <h4 class="swiper-rating">
+            <i class="fas fa-star text-secondary"></i>
+             ${show.vote_average} / 10
+         </h4>
+         `;
+
+		document.querySelector('.swiper-wrapper').appendChild(div);
+	});
+
+	initSwiper();
+}
+
 // Swiper initialization
 function initSwiper() {
 	const swiper = new Swiper('.swiper', {
@@ -326,6 +353,7 @@ function init() {
 			displayPopularMovies();
 			break;
 		case '/shows.html':
+			displayShowsSlider();
 			displayPopularShows();
 			break;
 		case '/movie-details.html':
